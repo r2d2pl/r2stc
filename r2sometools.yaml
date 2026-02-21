@@ -21,13 +21,15 @@ spec:
       #  - containerPort: 80
       - name: r2sometoolcontainer
         #image: gcr.io/google_containers/busybox
+        #image: gcr.io/google-containers/echoserver:1.10
         #image: ghcr.io/mendhak/http-https-echo:30
-        #image: alpine
         #image: oliverisaac/alpine-nettools
+        #image: raesene/alpine-nettools
         image: curlimages/curl:latest
-        #image: centos:7
-        #image: docker.io/centos:7
-        #gcr.io/google-containers/echoserver:1.10
+        #image: centos:7    #3YOLD
+        #image: alpine
+        #image: ubuntu:noble
+        #image: fedora:latest
         imagePullPolicy: IfNotPresent
         command: [ "sleep" , "3600"  ]
         resources:
@@ -37,5 +39,17 @@ spec:
           requests:
             cpu: 10m
             memory: 20Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
       restartPolicy: Always
       automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 1000
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
